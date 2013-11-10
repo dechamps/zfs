@@ -1553,6 +1553,10 @@ zil_commit_writer(zilog_t *zilog)
 		error = zio_wait(zilog->zl_root_zio);
 		zilog->zl_root_zio = NULL;
 		zil_flush_vdevs(zilog);
+#ifdef _KERNEL
+		printk(KERN_NOTICE "Injecting artificial 100 ms delay in zil_flush_vdevs()\n");
+		msleep(100);
+#endif
 	}
 
 	if (error || lwb == NULL)
